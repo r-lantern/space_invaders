@@ -1,7 +1,12 @@
-import curses
+import src.player as player
+import src.gui as gui
 
-scr = curses.initscr()
-hgt, wdt = scr.getmaxyx()
-wind = curses.newwin(hgt, wdt, 0, 0)
+gui = gui.Gui()
+player = player.Player()
 
-curses.endwin()
+gui.update(player)
+
+while True:
+    key = gui.getChar()
+    player.update_loc(key)
+    gui.update(player)
