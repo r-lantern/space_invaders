@@ -5,7 +5,7 @@ from src import consts
 
 class Player:
     def __init__(self) -> None:
-        self.icon = curses.ACS_LANTERN
+        self.icon = "^"
 
         self.x = consts.GAME_MARGIN_X
         self.y = consts.PLAYER_Y

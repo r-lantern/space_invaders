@@ -2,11 +2,11 @@ from src import consts
 
 
 class Invader:
-    def __init__(self) -> None:
+    def __init__(self, loc_x: int, loc_y: int) -> None:
         self.icon = "@"
 
-        self.x = consts.GAME_MARGIN_X
-        self.y = consts.GAME_MARGIN_Y
+        self.x = loc_x
+        self.y = loc_y
 
     def move_left(self) -> bool:
         if self.x < consts.GAME_MARGIN_X + consts.STEP:
