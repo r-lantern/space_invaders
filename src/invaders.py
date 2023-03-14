@@ -6,51 +6,76 @@ from src import invader
 
 class Invaders:
     def __init__(self, num_invaders: int) -> None:
-        self.size_x = consts.GAME_WDT - 6
+        self.size_x = consts.GAME_WDT // 2
         self.size_y = 3
 
-        self.offset_x = consts.GAME_MARGIN_X + 3
+        self.offset_x = consts.GAME_MARGIN_X + self.size_x // 2
         self.offset_y = consts.GAME_MARGIN_Y + 1
 
         self.num_invaders = num_invaders
-        self.array = [[None for _ in range(self.size_x)] for _ in range(self.size_y)]
-        self.create_array()
+        self.invader_set = set()
+        self.locations = set()
+        self.set_invaders()
 
-    def create_array(self) -> None:
-        invaders_x = [
-            random.randint(0, self.size_x - 1) for _ in range(self.num_invaders)
-        ]
-        invaders_y = [
-            random.randint(0, self.size_y - 1) for _ in range(self.num_invaders)
-        ]
+        self.left_most = consts.WIND_WDT + 1
+        self.right_most = -1
+        self.lowest = -1
 
-        for num in range(0, self.num_invaders):
-            loc_x = invaders_x[num]
-            loc_y = invaders_y[num]
-            self.array[loc_y][loc_x] = invader.Invader(
-                invaders_x[num] + self.offset_x, invaders_y[num] + self.offset_y
-            )
+        self.set_left_most()
+        self.set_right_most()
+        self.set_lowest()
+
+    def set_invaders(self) -> None:
+        num = 0
+        while num < self.num_invaders:
+            rand_x = random.randint(0, self.size_x - 1)
+            rand_y = random.randint(0, self.size_y - 1)
+            loc_x = rand_x + self.offset_x
+            loc_y = rand_y + self.offset_y
+            if (loc_x, loc_y) not in self.locations:
+                self.locations.add((loc_x, loc_y))
+                self.invader_set.add(invader.Invader(loc_x, loc_y))
+                num += 1
+
+    def set_left_most(self) -> None:
+        for loc in self.locations:
+            if loc[0] < self.left_most:
+                self.left_most = loc[0]
+
+    def set_right_most(self) -> None:
+        for loc in self.locations:
+            if loc[0] > self.left_most:
+                self.right_most = loc[0]
+
+    def set_lowest(self) -> None:
+        for loc in self.locations:
+            if loc[1] > self.lowest:
+                self.lowest = loc[0]
 
     def move_left(self) -> bool:
-        for col in range(0, self.size_x):
-            for row in range(0, self.size_y):
-                if self.array[row][col]:
-                    if not self.array[row][col].move_left():
-                        return False
+        if self.left_most < consts.GAME_MARGIN_X + consts.STEP:
+            return False
+
+        for alien in self.invader_set:
+            alien.move_left()
+        for pos in self.locations:
+            pos[0] -= consts.STEP
         return True
 
     def move_right(self) -> bool:
-        for col in range(self.size_x - 1, 0 - 1, -1):
-            for row in range(0, self.size_y):
-                if self.array[row][col]:
-                    if not self.array[row][col].move_right():
-                        return False
+        if self.right_most > consts.GAME_WDT - consts.STEPP:
+            return False
+
+        for alien in self.invader_set:
+            alien.move_right()
+        for pos in self.locations:
+            pos[0] += consts.STEP
         return True
 
     def move_down(self) -> bool:
-        for row in range(self.size_y - 1, 0 - 1, -1):
-            for col in range(0, self.size_x, 1):
-                if self.array[row][col]:
-                    if not self.array[row][col].move_down():
-                        return False
+        if self.lowest >= consts.PLAYER_Y - 1:
+            return False
+
+        for pos in self.locations:
+            pos[1] -= consts.STEP
         return True
