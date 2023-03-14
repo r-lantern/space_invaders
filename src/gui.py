@@ -5,15 +5,16 @@ import time
 from src import consts
 from src import player
 from src import invader
+from src import invaders
 
 
 class Gui:
-    def __init__(self, user: player, alien: invader) -> None:
+    def __init__(self, user: player, aliens: invaders) -> None:
         self.scr = curses.initscr()
         self.wind = curses.newwin(consts.WIND_HGT, consts.WIND_WDT, 2, 2)
 
         self.player = user
-        self.invader = alien
+        self.invaders = aliens
 
         self.wind.keypad(1)
         curses.curs_set(0)
@@ -25,43 +26,46 @@ class Gui:
         self.wind.addch(self.player.y, self.player.x, self.player.icon)
 
     def move_player(self, key: int) -> None:
-        self.player.update_loc(key)
+        self.player.move(key)
 
     def player_thread(self) -> None:
         while True:
             key = self.getChar()
-            self.move_player(self.player, key)
-            self.draw(self.player)
+            self.move_player(key)
 
-    def move_invader(self) -> None:
-        while self.invader.y < consts.PLAYER_Y - consts.STEP:
-            for _ in range(consts.GAME_MARGIN_X, consts.GAME_WDT - consts.STEP + 1):
-                self.invader.move_right()
+    def draw_invader(self, invader: invader) -> None:
+        self.wind.addch(invader.y, invader.x, invader.icon)
+
+    def draw_invaders(self) -> None:
+        size_x = len(self.invaders.array[0])
+        size_y = len(self.invaders.array)
+
+        for row in range(0, size_y):
+            for col in range(0, size_x):
+                alien = self.invaders.array[row][col]
+                if alien:
+                    self.draw_invader(alien)
+
+    def move_invaders(self) -> None:
+        while True:
+            while self.invaders.move_right():
                 self.draw()
-                time.sleep(0.1)
-
-            self.invader.move_down()
+            if not self.invaders.move_down():
+                return
             self.draw()
-            time.sleep(0.1)
-
-            for _ in range(consts.GAME_WDT - consts.STEP, consts.GAME_MARGIN_X - 1, -1):
-                self.invader.move_left()
+            while self.invaders.move_left():
                 self.draw()
-                time.sleep(0.1)
-
-            self.invader.move_down()
+            if not self.invaders.move_down():
+                return
             self.draw()
-            time.sleep(0.1)
-
-    def draw_invader(self) -> None:
-        self.wind.addch(self.invader.y, self.invader.x, self.invader.icon)
 
     def draw(self) -> None:
         self.wind.clear()
         self.wind.border(0)
         self.draw_player()
-        self.draw_invader()
+        self.draw_invaders()
         self.wind.refresh()
+        time.sleep(0.5)
 
     def close(self):
         curses.endwin()

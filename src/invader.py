@@ -21,7 +21,7 @@ class Invader:
         return True
 
     def move_down(self) -> bool:
-        if self.y >= consts.PLAYER_Y:
+        if self.y >= consts.PLAYER_Y - 1:
             return False
         self.y += consts.STEP
         return True
