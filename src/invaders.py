@@ -24,8 +24,6 @@ class Invaders:
         self.set_left_most()
         self.set_right_most()
         self.set_lowest()
-        print(self.locations)
-        print(self.left_most, self.right_most, self.lowest)
 
     def set_invaders(self) -> None:
         num = 0
@@ -62,9 +60,9 @@ class Invaders:
             alien.move_left()
 
         set_copy = self.locations.copy()
-        for pos in set_copy:
-            self.locations.add((pos[0] - consts.STEP, pos[1]))
-            self.locations.remove(pos)
+        for loc in set_copy:
+            self.locations.add((loc[0] - consts.STEP, loc[1]))
+            self.locations.remove(loc)
 
         self.left_most -= 1
         self.right_most -= 1
@@ -78,9 +76,9 @@ class Invaders:
             alien.move_right()
 
         set_copy = self.locations.copy()
-        for pos in set_copy:
-            self.locations.add((pos[0] + consts.STEP, pos[1]))
-            self.locations.remove(pos)
+        for loc in set_copy:
+            self.locations.add((loc[0] + consts.STEP, loc[1]))
+            self.locations.remove(loc)
 
         self.left_most += 1
         self.right_most += 1
@@ -94,9 +92,9 @@ class Invaders:
             alien.move_down()
 
         set_copy = self.locations.copy()
-        for pos in set_copy:
-            self.locations.add((pos[0], pos[1] + consts.STEP))
-            self.locations.remove(pos)
+        for loc in set_copy:
+            self.locations.add((loc[0], loc[1] + consts.STEP))
+            self.locations.remove(loc)
 
         self.lowest += 1
         return True

@@ -10,7 +10,6 @@ class Gui:
     def __init__(self, user: player, aliens: invaders) -> None:
         self.scr = curses.initscr()
         self.wind = curses.newwin(consts.WIND_HGT, consts.WIND_WDT, 2, 2)
-        self.wind.nodelay(True)
         self.wind.keypad(1)
         curses.curs_set(0)
 
@@ -35,6 +34,16 @@ class Gui:
         self.wind.border(0)
         self.draw_player()
         self.draw_invaders()
+        self.wind.refresh()
+
+    def draw_message(self, msg: str) -> None:
+        self.wind.clear()
+        self.wind.border(0)
+        self.wind.addstr(
+            consts.WIND_HGT // 2,
+            consts.WIND_WDT // 2 - len(msg) // 2,
+            msg,
+        )
         self.wind.refresh()
 
     def close(self):

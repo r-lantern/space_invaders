@@ -8,9 +8,14 @@ import time
 
 
 user = player.Player()
-aliens = invaders.Invaders(2)
+aliens = invaders.Invaders(15)
 game = gui.Gui(user, aliens)
 
+game.draw_message("SPACE INVADERS")
+game.wind.nodelay(False)
+game.get_char()
+
+game.wind.nodelay(True)
 game.draw()
 dir = consts.DIR_RIGHT
 
@@ -29,6 +34,8 @@ while True:
     elif dir == consts.DIR_DOWN1:
         if aliens.move_down():
             dir = consts.DIR_LEFT
+        else:
+            break
 
     elif dir == consts.DIR_LEFT:
         if not aliens.move_left():
@@ -37,6 +44,12 @@ while True:
     elif dir == consts.DIR_DOWN2:
         if aliens.move_down():
             dir = consts.DIR_RIGHT
+        else:
+            break
 
     game.draw()
     time.sleep(consts.DELAY)
+
+game.draw_message("GAME OVER")
+game.wind.nodelay(False)
+game.get_char()
