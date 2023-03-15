@@ -11,11 +11,9 @@ user = player.Player()
 aliens = invaders.Invaders(15)
 game = gui.Gui(user, aliens)
 
-game.draw_message("SPACE INVADERS")
-game.wind.nodelay(False)
-game.get_char()
+game.draw_message("PRESS ANY KEY")
+game.key_to_continue()
 
-game.wind.nodelay(True)
 game.draw()
 dir = consts.DIR_RIGHT
 
@@ -51,5 +49,5 @@ while True:
     time.sleep(consts.DELAY)
 
 game.draw_message("GAME OVER")
-game.wind.nodelay(False)
-game.get_char()
+time.sleep(3)
+game.key_to_continue()

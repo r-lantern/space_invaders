@@ -19,6 +19,11 @@ class Gui:
     def get_char(self) -> int:
         return self.wind.getch()
 
+    def key_to_continue(self) -> None:
+        self.wind.nodelay(False)
+        self.get_char()
+        self.wind.nodelay(True)
+
     def draw_player(self) -> None:
         self.wind.addch(self.player.y, self.player.x, self.player.icon)
 
