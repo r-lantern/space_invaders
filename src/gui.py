@@ -27,8 +27,8 @@ class Gui:
     def draw_player(self) -> None:
         self.wind.addch(self.player.y, self.player.x, self.player.icon)
 
-    def draw_invader(self, invader: invader) -> None:
-        self.wind.addch(invader.y, invader.x, invader.icon)
+    def draw_invader(self, alien: invader) -> None:
+        self.wind.addch(alien.y, alien.x, alien.icon)
 
     def draw_invaders(self) -> None:
         for alien in self.invaders.invader_set:
