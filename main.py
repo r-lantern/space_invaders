@@ -51,3 +51,4 @@ while True:
 game.draw_message("GAME OVER")
 time.sleep(3)
 game.key_to_continue()
+game.close()

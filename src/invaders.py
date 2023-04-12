@@ -59,10 +59,7 @@ class Invaders:
         for alien in self.invader_set:
             alien.move_left()
 
-        set_copy = self.locations.copy()
-        for loc in set_copy:
-            self.locations.add((loc[0] - consts.STEP, loc[1]))
-            self.locations.remove(loc)
+        self.set_locations()
 
         self.left_most -= 1
         self.right_most -= 1
@@ -75,10 +72,7 @@ class Invaders:
         for alien in self.invader_set:
             alien.move_right()
 
-        set_copy = self.locations.copy()
-        for loc in set_copy:
-            self.locations.add((loc[0] + consts.STEP, loc[1]))
-            self.locations.remove(loc)
+        self.set_locations()
 
         self.left_most += 1
         self.right_most += 1
@@ -91,10 +85,13 @@ class Invaders:
         for alien in self.invader_set:
             alien.move_down()
 
-        set_copy = self.locations.copy()
-        for loc in set_copy:
-            self.locations.add((loc[0], loc[1] + consts.STEP))
-            self.locations.remove(loc)
+        self.set_locations()
 
         self.lowest += 1
         return True
+
+    def set_locations(self) -> None:
+        loc_set = set()
+        for alien in self.invader_set:
+            loc_set.add((alien.x, alien.y))
+        self.locations = loc_set
