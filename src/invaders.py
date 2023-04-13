@@ -1,7 +1,7 @@
 import random
 
 from src import consts
-from src import invader
+from src.invader import Invader
 
 
 class Invaders:
@@ -34,7 +34,7 @@ class Invaders:
             loc_y = rand_y + self.offset_y
             if (loc_x, loc_y) not in self.locations:
                 self.locations.add((loc_x, loc_y))
-                self.invader_set.add(invader.Invader(loc_x, loc_y))
+                self.invader_set.add(Invader(loc_x, loc_y))
                 num += 1
 
     def set_left_most(self) -> None:
@@ -56,8 +56,8 @@ class Invaders:
         if self.left_most < consts.GAME_MARGIN_X + consts.STEP:
             return False
 
-        for alien in self.invader_set:
-            alien.move_left()
+        for invader in self.invader_set:
+            invader.move_left()
 
         self.set_locations()
 
@@ -69,8 +69,8 @@ class Invaders:
         if self.right_most > consts.GAME_WDT - consts.STEP:
             return False
 
-        for alien in self.invader_set:
-            alien.move_right()
+        for invader in self.invader_set:
+            invader.move_right()
 
         self.set_locations()
 
@@ -82,8 +82,8 @@ class Invaders:
         if self.lowest >= consts.PLAYER_Y - 1:
             return False
 
-        for alien in self.invader_set:
-            alien.move_down()
+        for invader in self.invader_set:
+            invader.move_down()
 
         self.set_locations()
 
@@ -92,6 +92,6 @@ class Invaders:
 
     def set_locations(self) -> None:
         loc_set = set()
-        for alien in self.invader_set:
-            loc_set.add((alien.x, alien.y))
+        for invader in self.invader_set:
+            loc_set.add((invader.x, invader.y))
         self.locations = loc_set
